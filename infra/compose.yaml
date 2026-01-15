@@ -1,10 +1,36 @@
+version: "3.9"
+
 services:
+  postgres:
+    image: postgres:15
+    container_name: mlflow-postgres
+    environment:
+      POSTGRES_USER: mlflow
+      POSTGRES_PASSWORD: mlflow
+      POSTGRES_DB: mlflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mlflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   mlflow:
-     build:
-       context: ..
-       dockerfile: infra/Dockerfile
-     container_name: mlflow-app
-     volumes:
-       - "/mlflow"
-     ports:
-        - "5000:5000"
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    container_name: mlflow-app
+    ports:
+      - "5000:5000"
+    environment:
+      MLFLOW_BACKEND_STORE_URI: postgresql://mlflow:mlflow@postgres:5432/mlflow
+      MLFLOW_DEFAULT_ARTIFACT_ROOT: s3://pipeout-database/mlflow-artifacts
+      AWS_DEFAULT_REGION: us-east-2
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
