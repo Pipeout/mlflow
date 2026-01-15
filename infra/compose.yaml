@@ -1,0 +1,10 @@
+services:
+  mlflow:
+     build:
+       context: ..
+       dockerfile: infra/Dockerfile
+     container_name: mlflow-app
+     volumes:
+       - "/mlflow"
+     ports:
+        - "5000:5000"
