@@ -31,5 +31,5 @@ jobs:
           file: infra/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/airflow:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/airflow:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/mlflow:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/mlflow:${{ github.sha }}
