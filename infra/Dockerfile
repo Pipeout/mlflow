@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-  
+
 WORKDIR /mlflow
 
 
@@ -21,4 +21,4 @@ EXPOSE 5000
 
 CMD [ "mlflow", "server", "--host", \
   "0.0.0.0", \
-  "--port", "5000"]
+  "--port", "5000", "--workers 2", "--backend-store-uri ${BACKEND_STORE_URI}" ,"--default-artifact-root ${DEFAULT_ARTIFACT_ROOT}"]
