@@ -1,4 +1,4 @@
-name: Build and Push to ECR
+name: Build and Push mlflow to ECR
 
 on:
   push:
@@ -11,10 +11,10 @@ permissions:
 
 env:
   AWS_REGION: us-east-2
-  IMAGE_NAME: airflow-pipeout
+  IMAGE_NAME: mlflow-pipeout
   ECS_CLUSTER: pipeout-cluster
-  ECS_SERVICE: airflow
-  TASK_DEFINITION_FAMILY: airflow
+  ECS_SERVICE: mlflow
+  TASK_DEFINITION_FAMILY: mlflow
   DOCKERFILE_PATH: infra/Dockerfile
 
 jobs:
@@ -65,7 +65,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: airflow
+          container-name: mlflow
           image: ${{ env.IMAGE_URI }}
 
       - name: Deploy ECS task definition
